@@ -1,0 +1,114 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Avant">
+    <meta name="author" content="The Red Team">
+
+    <!-- <link href="~/Content/less/styles.less" rel="stylesheet/less" media="all">  -->
+    <link rel="stylesheet" href="~/Content/css/styles.css?=140">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
+
+    <link href='~/Content/demo/variations/default.css' rel='stylesheet' type='text/css' media='all' id='styleswitcher'>
+    <link href='~/Content/demo/variations/default.css' rel='stylesheet' type='text/css' media='all' id='headerswitcher'>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries. Placeholdr.js enables the placeholder attribute -->
+    <!--[if lt IE 9]>
+        <link rel="stylesheet" href="~/Content/css/ie8.css">
+        <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.1.0/respond.min.js"></script>
+        <script type="text/javascript" src="~/Content/plugins/charts-flot/excanvas.min.js"></script>
+    <![endif]-->
+    <!-- The following CSS are included as plugins and can be removed if unused-->
+
+    <link rel='stylesheet' type='text/css' href='~/Content/plugins/form-daterangepicker/daterangepicker-bs3.css' />
+    <link rel='stylesheet' type='text/css' href='~/Content/plugins/fullcalendar/fullcalendar.css' />
+    <link rel='stylesheet' type='text/css' href='~/Content/plugins/form-markdown/css/bootstrap-markdown.min.css' />
+    <link rel='stylesheet' type='text/css' href='~/Content/plugins/codeprettifier/prettify.css' />
+    <link rel='stylesheet' type='text/css' href='~/Content/plugins/form-toggle/toggles.css' />
+
+    <!-- <script type="text/javascript" src="~/Content/js/less.js"></script> -->
+</head>
+
+<body class="">
+
+
+
+    @Html.Partial("_LoginPartial")
+
+    <div id="page-container">
+
+        @Html.Partial("_SiderbarMenu")
+
+        <div id="page-content">
+            <div id='wrap'>
+
+
+                <div class="container">
+                    @RenderBody()
+                </div>
+            </div> <!--wrap -->
+        </div> <!-- page-content -->
+
+
+        @Html.Partial("_Footer")
+
+    </div> <!-- page-container -->
+    <!--
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+    <script>!window.jQuery && document.write(unescape('%3Cscript src="~/Content/js/jquery-1.10.2.min.js"%3E%3C/script%3E'))</script>
+    <script type="text/javascript">!window.jQuery.ui && document.write(unescape('%3Cscript src="~/Content/js/jqueryui-1.10.3.min.js'))</script>
+    -->
+
+    <script type='text/javascript' src='~/Content/js/jquery-1.10.2.min.js'></script>
+    <script type='text/javascript' src='~/Content/js/jqueryui-1.10.3.min.js'></script>
+    <script type='text/javascript' src='~/Content/js/bootstrap.min.js'></script>
+    <script type='text/javascript' src='~/Content/js/enquire.js'></script>
+    <script type='text/javascript' src='~/Content/js/jquery.cookie.js'></script>
+    <script type='text/javascript' src='~/Content/js/jquery.nicescroll.min.js'></script>
+    <script type='text/javascript' src='~/Content/plugins/codeprettifier/prettify.js'></script>
+    <script type='text/javascript' src='~/Content/plugins/easypiechart/jquery.easypiechart.min.js'></script>
+    <script type='text/javascript' src='~/Content/plugins/sparklines/jquery.sparklines.min.js'></script>
+    <script type='text/javascript' src='~/Content/plugins/form-toggle/toggle.min.js'></script>
+    <script type='text/javascript' src='~/Content/plugins/form-ckeditor/ckeditor.js'></script>
+    @*<script type='text/javascript' src='~/Content/plugins/fullcalendar/fullcalendar.min.js'></script>*@
+    <script type='text/javascript' src='~/Content/plugins/form-daterangepicker/daterangepicker.min.js'></script>
+    <script type='text/javascript' src='~/Content/plugins/form-daterangepicker/moment.min.js'></script>
+    @*<script type='text/javascript' src='~/Content/plugins/charts-flot/jquery.flot.min.js'></script>
+        <script type='text/javascript' src='~/Content/plugins/charts-flot/jquery.flot.resize.min.js'></script>
+        <script type='text/javascript' src='~/Content/plugins/charts-flot/jquery.flot.orderBars.min.js'></script>*@
+    <script type='text/javascript' src='~/Content/plugins/pulsate/jQuery.pulsate.min.js'></script>
+    @*<script type='text/javascript' src='~/Content/demo/demo-index.js'></script>*@
+    <script type='text/javascript' src='~/Content/js/placeholdr.js'></script>
+    <script type='text/javascript' src='~/Content/js/application.js'></script>
+    @*<script type='text/javascript' src='~/Content/demo/demo.js'></script>*@
+
+
+    <script type='text/javascript' src="~/Scripts/knockout-3.3.0.js"></script>
+    <script type='text/javascript' src="~/Scripts/knockout.mapping-latest.js"></script>
+    <script type='text/javascript' src="~/Scripts/knockout.validation.debug.js"></script>
+
+
+    <script src="~/Scripts/select2.js"></script>
+    <link href="~/Content/select2/select2.css" type="text/css" rel="stylesheet" />
+    <style>
+        body:before {
+            background-color: #f2f2f2;
+        }
+
+        .select2-container {
+            width: 100%;
+        }
+    </style>
+
+    @RenderSection("scripts", required: false)
+
+
+</body>
+</html>

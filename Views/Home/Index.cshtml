@@ -1,0 +1,154 @@
+﻿@{
+    ViewBag.Title = "Sipariş Listesi";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-gray">
+            <div class="panel-heading">
+                <h4>Spariş Listesi</h4>
+                <div class="options">
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="col-xs-1">
+                    <div id="example_length" class="dataTables_length">
+                        <label>
+                            <select size="1" id="tablePageSize" name="tablePageSize" aria-controls="example" class="form-control tablePageSize">
+                                <option value="10" selected="selected">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div id="example_length" class="dataTables_length">
+                        Sipariş Durumu:
+                        <label>
+                            <select size="1" id="carboyStatus" name="carboyStatus" aria-controls="example" class="form-control carboyStatus">
+                                <option value="-1" selected="selected">Seçiniz</option>
+                                <option value="0">Yeni</option>
+                                <option value="1">Spariş Gönderildi</option>
+                                <option value="2">Teslim Edildi</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <input type="text" id="searchKey" placeholder="Damacana Ara..." class="form-control">
+                </div>
+                <div class="col-xs-1">
+                    <div class="input-group-btn">
+                        <button type="button" id="btnSearch" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+                <hr>
+                <table class="table table-striped table-advance table-hover mailbox">
+                    <thead>
+                        <tr>
+                            <th width="5%"><span><input type="checkbox"></span></th>
+                            <th colspan="1">
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody data-bind="foreach: orderlist_index.ActivityList()">
+                        <tr class="unread" style="color:white" data-bind="style: { backgroundColor: CarboyStatus() == 0 ? 'red' :  CarboyStatus() == 1 ? 'blue' :'green'}, attr: {'class': 'tr_' + OrderId()}">
+                            <td><span><input type="checkbox"></span></td>
+                            <td class="hidden-xs">
+                                <span data-bind="text: UserName"></span>
+                            </td>
+                            <td><span data-bind="text: FirstName"></span></td>
+                            <td><span data-bind="text: LastName"></span></td>
+                            <td><span data-bind="text: CarboyStatus"></span></td>
+                            <td><span data-bind="text: CarboyAddress"></span></td>
+                            <td class="text-right"><span data-bind="text: CreatedDate"></span></td>
+                            <td>
+                                <div class="pull-right">
+                                    <a href="javascript:" onclick="javascript: orderlist_index.statusReplace(this);" data-bind="attr: {'data-Id': OrderId,'data-status': '1'}" class="btn btn-primary btn-sm">Gönderildi</a>
+                                    <a href="javascript:" onclick="javascript: orderlist_index.statusReplace(this);" data-bind="attr: {'data-Id': OrderId,'data-status': '2'}" class="btn btn-success btn-sm">Teslim</a>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+                @Html.Partial("_Pager")
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/jquery.signalR-2.2.1.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/signalr/hubs")"></script>
+
+    <script src="~/Scripts/application/orderlist_index.js"></script>
+    <script>
+        var carboyList = [];
+        var template = "<tr style='background-color:#fc4949;color:white' class='{tr}'><td><span><input type='checkbox'></span></td>" +
+                            "<td class='hidden-xs'><span>{UserName}</span></td>" +
+                            "<td><span>{FirstName}</span></td>" +
+                            "<td><span>{LastName}</span></td>" +
+                            "<td><span>{CarboyStatus}</span></td>" +
+                            "<td><span>{CarboyAddress}</span></td>" +
+                            "<td class='text-right'><span>{CreatedDate}</span></td>" +
+                            "<td>" +
+                               "<div class='pull-right'>" +
+                                    "<a href='javascript:' onclick='javascript: orderlist_index.statusReplace(this);' data-Id='{dataId}' data-status='1' class='btn btn-primary btn-sm'>Gönderildi</a>" +
+                                    "<a href='javascript:' onclick='javascript: orderlist_index.statusReplace(this);' data-Id='{dataId}' data-status='2' class='btn btn-success btn-sm'>Teslim</a>" +
+                                "</div>" +
+                            "</td>" +
+                            "</tr>";
+
+        carboyList = '@Html.Raw(Json.Encode(ViewBag.UserCarboyList))'
+
+        $(document).ready(function () {
+            orderlist_index.init();
+        });
+
+        var chatHub = $.connection.gamesHub;
+        registerClientMethods(chatHub);
+
+        $.connection.hub.start().done(function () {
+            //registerEvents(chatHub);
+        });
+
+
+        function registerClientMethods(chatHub) {
+            chatHub.client.refreshCarboyData = function (data) {
+
+                console.log(data[0].OrderId);
+                var temp = template;
+
+                temp = temp.replace("{tr}", 'tr_' + data[0].OrderId);
+                temp = temp.replace("{dataId}", data[0].OrderId);
+                temp = temp.replace("{dataId}", data[0].OrderId);
+                temp = temp.replace("{UserName}", data[0].UserName);
+                temp = temp.replace("{FirstName}", data[0].FirstName);
+                temp = temp.replace("{LastName}", data[0].LastName);
+                temp = temp.replace("{CarboyStatus}", data[0].CarboyStatus);
+                temp = temp.replace("{CarboyAddress}", data[0].CarboyAddress);
+                temp = temp.replace("{CreatedDate}", data[0].CreatedDate);
+
+                $('table > tbody > tr:first').before(temp).fadeIn("slow");
+
+            }
+        }
+
+        function myReplaceMethod(str, find, replace_with) {
+            while (str.indexOf(find) !== -1) {
+                from = str.indexOf(find);
+                to = from + find.length;
+                str = str.substr(0, from) + replace_with + str.substr(to, str.length - to);
+            }
+            return str;
+        }
+    </script>
+}
+

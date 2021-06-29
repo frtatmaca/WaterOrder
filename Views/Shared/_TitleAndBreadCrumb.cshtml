@@ -1,0 +1,30 @@
+﻿@model Blms.Model.ViewModel.TitleAndBreadCrumb
+
+<div class="row-fluid">
+    <h3 class="page-title pull-left">
+        @(Model.LocalizeTitle ?  Model.Title : Html.LocalizeGlobal(Model.Title) )
+
+
+    </h3>
+
+    @if (Model.ActionLinks.Count > 0)
+    {
+        <div class="page-actions pull-right">
+            @foreach (var link in Model.ActionLinks)
+            {
+                <a class="@link.Item1" href="@link.Item2"><i class="@link.Item4"></i>&nbsp;@link.Item3</a>
+            }
+            <p class="clearfix"></p>
+        </div>
+    }
+    @if (Model.ActionLinksId.Count > 0)
+    {
+        <div class="page-actions pull-right">
+            @foreach (var link in Model.ActionLinksId)
+            {
+                <a class="@link.Item1" id="@link.Item2" data-id="@link.Item3"><i class="@link.Item5"></i>&nbsp;@link.Item4</a>
+            }
+            <p class="clearfix"></p>
+        </div>
+    }
+</div>

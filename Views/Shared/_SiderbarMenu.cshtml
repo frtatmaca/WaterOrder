@@ -1,0 +1,41 @@
+﻿ <!-- BEGIN SIDEBAR -->
+<nav id="page-leftbar" role="navigation">
+    <!-- BEGIN SIDEBAR MENU -->
+    <ul class="acc-menu" id="sidebar">
+        <li id="search">
+            <a href="javascript:;"><i class="fa fa-search opacity-control"></i></a>
+            <form>
+                <input type="text" class="search-query" placeholder="Search...">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+        </li>
+
+        @if (LMS.LMSData.User != null && LMS.LMSData.User.UType == SUserType.Admin)
+        {
+            <li>
+                <a href="/Home/Index"><i class="fa fa-flag"></i> <span>Sipariş Listesi</span>@*<span class="badge badge-danger">1</span>*@</a>
+            </li>
+
+            <li>
+                <a href="/Carboy/CarboyCordinate"><i class="fa fa-map-marker"></i> <span>Damacana Kordinatları</span></a>
+            </li>
+
+            <li>
+                <a href="/Carboy/Index"><i class="fa fa-credit-card"></i> <span>Damacana Listesi</span> @*<span class="badge badge-orange">2</span>*@</a>
+            </li>
+
+            <li>
+                <a href="/User/Index"><i class="fa fa-user"></i> <span>Kullanıcılar</span> </a>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a href="/Home/ClientOrder"><i class="fa fa-flag"></i> <span>Sipariş Listesi</span>@*<span class="badge badge-danger">1</span>*@</a>
+            </li>
+        }
+        <li class="divider"></li>
+
+    </ul>
+    <!-- END SIDEBAR MENU -->
+</nav>

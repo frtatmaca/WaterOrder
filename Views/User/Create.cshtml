@@ -1,0 +1,72 @@
+﻿@model LMS.Users
+
+@{
+    ViewBag.Title = "User Create";
+}
+
+<div class="panel panel-midnightblue">
+    <div class="panel-heading">
+        <h4>Yeni Kullancı</h4>
+
+    </div>
+    <div class="panel-body collapse in">
+
+        @using (Html.BeginForm("Create", "User", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal row-border", @style = "border - radius: 0px;", id = "frmMenuItemCreate" }))
+            {
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Kullanıcı Adı</label>
+                <div class="col-sm-6">
+                    @Html.TextBoxFor(m => m.UserName, "", new { id = "Name", @class = "form-control", @placeholder = "Kullanıcı Adı" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Ad</label>
+                <div class="col-sm-6">
+                    @Html.TextBoxFor(m => m.FirstName, "", new { id = "FirstName", @class = "form-control", @placeholder = "Ad" })
+                </div>
+            </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Soyad</label>
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(m => m.LastName, "", new { id = "LastName", @class = "form-control", @placeholder = "Soyad" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Email</label>
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(m => m.Email, "", new { id = "Email", @class = "form-control", @placeholder = "Email" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Adres</label>
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(m => m.Address, "", new { id = "Address", @class = "form-control", @placeholder = "Address" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Password</label>
+                    <div class="col-sm-6">
+                        @Html.PasswordFor(m => m.Password, new { id = "Password", @class = "form-control", @placeholder = "Password" })
+                    </div>
+                </div>
+
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <div class="btn-toolbar">
+                                <button class="btn-primary btn" type="submit">Kaydet</button>
+                                <a href="/User/Index" class="btn-default btn">İptal</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        }
+
+    </div>
+
+</div>
+

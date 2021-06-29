@@ -1,0 +1,205 @@
+﻿@{
+    Layout = null;
+    var lang = System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
+    var jsculture = System.Threading.Thread.CurrentThread.CurrentUICulture.ToString().Replace("-", "");
+    var dateFormat = Blms.Web.Core.WebUtilities.GetDateFormatForJQueryUI();
+    var decimalSeperator = Blms.Web.Core.WebUtilities.GetDecimalSeperator();
+}
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="@lang" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="@lang" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="@lang" style="height:100%">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+
+    <link href="@Blms.Web.Core.WebUtilities.GetFaviconPath()" onerror="if(this.href.indexOf('@VirtualPathUtility.ToAbsolute("~/favicon.ico")')===-1) this.href='@VirtualPathUtility.ToAbsolute("~/favicon.ico")'" rel="shortcut icon" type="image/x-icon" />
+
+
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/themes/base/css")
+    @Styles.Render("~/Content/basecss")
+    @Styles.Render("~/Content/metro/css")
+    @Styles.Render("~/Content/themes/uniformjs/default/css/uniform.default.min.css")
+    @Styles.Render("~/Content/utils")
+
+    <style>
+        @Html.Raw(Blms.Web.Core.Common.GetHelperValue("OS_Display_CustomCSS"));
+    </style>
+
+    <link href="@Styles.Url("~/Content/metrocss/themes/default.css")" rel="stylesheet" id="style_color" />
+    <!-- BEGIN PAGE LEVEL STYLES -->
+    @RenderSection("header", required: false)
+    <!-- END PAGE LEVEL STYLES -->
+
+
+    <script type="text/javascript">
+        window.MVCURL = '@Url.Action("--Action--", "--Controller--")';
+        
+        function IsFormValid(frmObj) {
+            var validator = frmObj.validate();
+
+            var anyError = false;
+
+            frmObj.find("input").each(function () {
+                if ($(this).attr("type") !== "checkbox") {
+                    if (!validator.element(this)) { // validate every input element inside this step
+                        anyError = true;
+                    }
+                }
+            });
+
+            frmObj.find("select").each(function () {
+                if (!validator.element(this)) { // validate every input element inside this step
+                    anyError = true;
+                }
+            });
+
+            frmObj.find("textarea").each(function () {
+                if (!validator.element(this)) { // validate every input element inside this step
+                    anyError = true;
+                }
+            });
+
+            validator.showErrors();
+
+            return !anyError;
+        }
+
+
+        function CloseFancyBox() {
+
+            $("#dialog-warning").dialog("destroy");
+            $("#dialog-warning").dialog({
+                modal: true,
+                buttons: [
+					{
+					    text: '@Html.LocalizeGlobal("r_gen_ok")',
+					    click: function () { $(this).dialog("close"); parent.$.fancybox.close(); }
+					},
+						{
+						    text: '@Html.LocalizeGlobal("r_gen_cancel")',
+						    click: function () { $(this).dialog("close"); }
+						}
+                ]
+            });
+        }
+
+        function CloseFancyBoxWithoutWarning() {
+            parent.$.fancybox.close();
+        }
+
+    </script>
+</head>
+<body>
+    <style>
+        body {
+            background-color: white !important;
+        }
+    </style>
+
+    <div>
+        <div id="dialog-warning" title="Warning" style="display: none">
+            <p>@Html.LocalizeGlobal("r_shared_confirmclosewindow")</p>
+        </div>
+        @RenderBody()
+    </div>
+    @*confirm modal*@
+    <div id="blms_confirm_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="blms_confirm_modal_label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h3 id="blms_confirm_modal_label">@Html.LocalizeGlobal("r_shared_confirmheader")</h3>
+        </div>
+        <div class="modal-body">
+            <p>Body goes here...</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btnCancel" data-dismiss="modal" aria-hidden="true">@Html.LocalizeGlobal("r_gen_close")</button>
+            <button data-dismiss="modal" class="btn green btnOk">@Html.LocalizeGlobal("r_shared_confirm")</button>
+        </div>
+    </div>
+    @*confirm modal*@
+
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/dataservice")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/basescripts")
+    @Scripts.Render("~/bundles/app")
+    @Scripts.Render("~/bundles/application")
+    @Scripts.Render("~/bundles/utils")
+
+    <!-- ie8 fixes -->
+    <!--[if lt IE 9]>
+	@*Scripts.Render("~/bundles/ie")*@
+	<![endif]-->
+
+    @*  @Scripts.Render("~/bundles/modernizr")
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/knockout")*@
+    @Scripts.Render("~/bundles/utilities")@*
+	@Scripts.Render("~/bundles/prettify")
+
+
+	@Scripts.Render("~/bundles/metro")
+	@Scripts.Render("~/bundles/app")
+	@Scripts.Render("~/bundles/application")
+
+
+
+	@Scripts.Render("~/Scripts/select2_locale/select2_locale_" + System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName + ".js")*@
+
+
+    @Scripts.Render("~/jsLocalization.ashx")
+
+
+    <script type="text/javascript">
+
+        $(function () {
+            //App.setPage("table_editable");
+            //App.setPage("index");
+            App.setBaseUrl('@Href("~/Content/")')
+            App.init();
+            moment.lang('@lang');
+            blmsCommon.init('@lang', '@dateFormat', '@decimalSeperator');
+            serviceInitializer.init();
+            FormComponents.init('@lang', '@dateFormat');
+
+
+        });
+
+        var l10n = {
+            "getMessage": function (msg) {
+                var culture = "@jsculture";
+                if (!jsLocalization || !jsLocalization[culture]) return msg;
+                var rVal = jsLocalization[culture][msg];
+
+                if (rVal == undefined) {
+                    var controller = '@HttpContext.Current.Request.RequestContext.RouteData.GetRequiredString("controller")';
+                    var action = '@HttpContext.Current.Request.RequestContext.RouteData.GetRequiredString("action")';
+                    var json = { text: msg, className: controller + '/' + action };
+
+                    globalizationService.save(json);
+
+                    return msg;
+                } 
+                else {
+                    return rVal;
+                }
+            }
+        };
+    </script>
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

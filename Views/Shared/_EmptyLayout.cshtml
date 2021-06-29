@@ -1,0 +1,231 @@
+﻿@{
+    Layout = null;
+    var lang = System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
+    var dateFormat = Blms.Web.Core.WebUtilities.GetDateFormatForJQueryUI();
+    var decimalSeperator = Blms.Web.Core.WebUtilities.GetDecimalSeperator();
+    bool isTrackingEnabled = ViewBag.WebAnalyticsParameters != null;
+
+    string loginBackgroundColor = Blms.Web.Core.Common.GetOrganization().HelperValues.Where(m => m.Code == "OS_Display_LeftMenuBackgroundColor").FirstOrDefault().Text;
+    string loginBackroundStyle = "";
+    loginBackroundStyle = "background-color:" + loginBackgroundColor + " !important;";
+
+    string useAnn = Blms.Web.Core.Common.GetOrganization().HelperValues.Where(m => m.Code == "OS_UseLoginAnnouncement").FirstOrDefault() != null ? Blms.Web.Core.Common.GetOrganization().HelperValues.Where(m => m.Code == "OS_UseLoginAnnouncement").FirstOrDefault().Text : "";
+    string loginText = Blms.Web.Core.Common.GetOrganization().HelperValues.Where(m => m.Code == "OS_LoginText").FirstOrDefault() != null ? Blms.Web.Core.Common.GetOrganization().HelperValues.Where(m => m.Code == "OS_LoginText").FirstOrDefault().Text : "";
+    string loginFooter = Blms.Web.Core.Common.GetOrganization().HelperValues.Where(m => m.Code == "OS_LoginFooter").FirstOrDefault() != null ? Blms.Web.Core.Common.GetOrganization().HelperValues.Where(m => m.Code == "OS_LoginFooter").FirstOrDefault().Text : "";
+    
+}
+
+@functions 
+{
+    public string GetTrackingParamValue(string key)
+    {
+        Dictionary<string, string> webAnalyticsParameters = (Dictionary<string, string>)ViewBag.WebAnalyticsParameters;
+        bool isTrackingEnabled = webAnalyticsParameters != null;
+        if (isTrackingEnabled)
+        {
+            if (webAnalyticsParameters.ContainsKey(key)) return webAnalyticsParameters[key];
+        }
+        return "\"\"";
+    }
+}
+
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="@lang" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="@lang" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="@lang">
+<!--<![endif]-->
+
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Styles.Render("~/Content/bootstrap-responsive.min.css")
+    @Styles.Render("~/Content/font-awesome.min.css")
+    @Styles.Render("~/Content/metrocss/style-metro.css")
+    @Styles.Render("~/Content/metrocss/style.css")
+    @Styles.Render("~/Content/metrocss/style-responsive.css")
+    @Styles.Render("~/Content/themes/uniformjs/default/css/default.css")
+    @Styles.Render("~/Content/themes/uniformjs/default/css/uniform.default.min.css")
+
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/metro/css")
+    <!-- END GLOBAL MANDATORY STYLES -->
+
+    <!-- BEGIN PAGE LEVEL STYLES -->
+    @Styles.Render("~/Content/metrocss/pages/login-2.css")
+    @RenderSection("Scripts", false)
+    <!-- END PAGE LEVEL STYLES -->
+    @RenderSection("header", required: false)
+    <style>
+        @Html.Raw(Blms.Web.Core.Common.GetHelperValue("OS_Display_CustomCSS"));
+    </style>
+    <style>        
+        .login-2
+        {
+            background: no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+
+    <link href="@Blms.Web.Core.WebUtilities.GetFaviconPath()" onerror="if(this.href.indexOf('@VirtualPathUtility.ToAbsolute("~/favicon.ico")')===-1) this.href='@VirtualPathUtility.ToAbsolute("~/favicon.ico")'" rel="shortcut icon" type="image/x-icon" />
+
+</head>
+<!-- END HEAD -->
+
+<!-- BEGIN BODY -->
+<body class="login-2" style="background-image:url(@Blms.Web.Core.WebUtilities.GetLoginBackroundImagePath());background-color:@loginBackgroundColor;">
+    <!--
+        @RenderSection("titleAndBreadcrumb", required: false)
+    -->
+
+    <!-- BEGIN LOGIN -->
+    <!-- BEGİN CONTENT -->
+    <div class="content">
+
+        <!-- BEGİN CONTAINER FLUID -->
+        <div class="container-fluid">
+
+            <!-- BEGIN LOGO -->
+            <div class="logo" align="center">
+                <img src="@Blms.Web.Core.WebUtilities.GetLoginLogoPath()" alt="" onerror="if(this.src.indexOf('@VirtualPathUtility.ToAbsolute("~/Content/img/assets/alms_logo_seffaf.png")')===-1) this.src='@VirtualPathUtility.ToAbsolute("~/Content/img/assets/alms_logo_seffaf.png")'" style="max-width:400px;max-height:200px;"/>
+            </div>
+            <!-- END LOGO -->
+
+            <!-- BEGİN ROW FLUID -->
+            @RenderBody()
+            @*<div class="row-fluid">
+
+                <!-- BEGIN LOGIN FORM -->
+                @RenderBody()
+                <!-- END LOGIN FORM -->
+
+                @if (useAnn != "")
+                {
+                    if (useAnn == "on")
+                    {
+                    <!-- ko if: publicAnnouncements().length > 0-->
+                    <div class="duyurular offset1 span5" id="annGuest">
+                        <h3 class="title"><i class="icon-bullhorn"></i>&nbsp @Html.LocalizeGlobal("r_shared_announcements")</h3>
+                        <ul id="annGuestUl" data-bind="foreach: publicAnnouncements">
+                            <li>
+                                <i class="icon-chevron-right"></i>&nbsp<a href="javascript:" class="iframe" data-bind="attr: { href: '/Announcement/PublicAnnouncementDetail/' + annId }, text: subject"></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko if: publicAnnouncements().length == 0-->
+                    <div class="duyurular offset1 span5">
+                        <h3>@Html.LocalizeGlobal("r_shared_noannouncements")</h3>
+                    </div>
+                    <!-- /ko -->​
+                    }
+                    else if (useAnn == "false" && loginText != "")
+                    {
+                    <div class="duyurular offset1 span5">
+                        <p></p>
+                        <p>@Html.Raw(loginText)</p>
+                    </div>
+                    }
+                    else
+                    {
+                    <div class="duyurular offset1 span5">
+                        <h3>@Html.LocalizeGlobalFormatted("Welcome to {0}", @Blms.Web.Core.SessionVariables.CurrentOrganization.Name)</h3>
+                    </div>
+                    }
+                }
+                else
+                {
+                    <div class="duyurular offset1 span5">
+                        <h3>@Html.LocalizeGlobalFormatted("Welcome to {0}", @Blms.Web.Core.SessionVariables.CurrentOrganization.Name)</h3>
+                    </div>
+                }
+
+            </div>*@
+            <!-- END ROW FLUID -->
+
+        </div>
+        <!-- END CONTAINER FLUID -->
+
+    </div>
+    <!-- END CONTENT -->
+
+    @if (loginFooter != "")
+    { 
+        <!-- BEGIN CONTENT -->
+        <div class="content login-page-footer">
+            <div class="description">
+                <p>
+                    @Html.Raw(loginFooter)
+                </p>
+            </div>
+
+            <div class="copyright">
+                <p class="copytext">&copy;2013-@DateTime.UtcNow.Year ALMS by Advancity</p>
+                <p>@Html.LocalizeGlobal("r_shared_allrightsreserved")</p>
+            </div>
+            <br />
+            <br />
+            <br />
+        </div>
+        <!-- END CONTENT -->
+    }
+
+    <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+    <!-- BEGIN CORE PLUGINS -->
+
+    <!-- BEGIN CORE PLUGINS -->
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/basescripts")
+    @Scripts.Render("~/bundles/app")
+    @Scripts.Render("~/bundles/application")
+    <!-- ie8 fixes -->
+    <!--[if lt IE 9]>
+    @*Scripts.Render("~/bundles/ie")*@
+	<![endif]-->
+    @Scripts.Render("~/Scripts/jquery.slimscroll.js")
+    @Scripts.Render("~/Scripts/jquery.blockui.js")
+    @Scripts.Render("~/Scripts/metro/login.js")
+    @Scripts.Render("~/bundles/dataservice")
+    @Scripts.Render("~/bundles/utilities")
+    @Scripts.Render("~/bundles/utils")
+    @Scripts.Render("~/bundles/knockout")
+    <!-- END CORE PLUGINS -->
+
+    <script>
+        jQuery(document).ready(function () {
+            App.init();
+            moment.lang('@lang');
+            Login.init('@useAnn');
+            blmsCommon.init('@lang', '@dateFormat', '@decimalSeperator');
+            var trackingEnabled = @isTrackingEnabled.ToString().ToLowerInvariant();
+            if(trackingEnabled) {
+                blmsCommon.initTracking(@Html.Raw(GetTrackingParamValue("trackingCode")),
+                 @Html.Raw(GetTrackingParamValue("trackingType")),
+                @Html.Raw(GetTrackingParamValue("organization")), 
+                @Html.Raw(GetTrackingParamValue("program")),
+                @Html.Raw(GetTrackingParamValue("course")), 
+                @Html.Raw(GetTrackingParamValue("activity")),
+                @Html.Raw(GetTrackingParamValue("pageTitle")));
+            }
+        });
+    </script>
+    @RenderSection("scriptsForLogin", required: false)
+    <!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

@@ -1,0 +1,19 @@
+﻿@model List<LMS.Users>
+
+<body>
+    <div id="gamesContent">
+        <table>
+            <tr>
+                @foreach (Users item in Model)
+                {
+                    <td style="padding: 10px">
+                        <div><b>[@item.UserId] @item.UserName</b></div>                                                
+                        <img src="~/Content/img/patterns/grey_wash_wall.png" />
+                        <div><h4><b><font color="red">@item.FirstName @item.LastName</font></b></h4></div>
+                        <div><input type='button' value='Buy' class='btnClass' /></div>
+                    </td>
+                }
+            </tr>
+        </table>
+    </div>
+</body>

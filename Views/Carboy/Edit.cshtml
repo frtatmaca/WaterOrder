@@ -1,0 +1,111 @@
+﻿@model LMS.Carboys
+
+@{
+    ViewBag.Title = "Carboy Edit";
+}
+
+<div class="panel panel-midnightblue">
+    <div class="panel-heading">
+        <h4>Damacana Düzenle</h4>
+
+    </div>
+    <div class="panel-body collapse in">
+
+        @using (Html.BeginForm("Edit", "Carboy", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal row-border", @style = "border - radius: 0px;", id = "frmCarboyCreate" }))
+            {
+            @Html.HiddenFor(m => m.CarboyId)
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Damacana Adı</label>
+                <div class="col-sm-6">
+                    @Html.TextBoxFor(m => m.CarboyName, "", new { id = "CarboyName", @class = "form-control", @placeholder = "Damacana Adı" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Damacana Türü</label>
+                <div class="col-sm-6">
+                    @Html.TextBoxFor(m => m.CarboySpecies, "", new { id = "CarboySpecies", @class = "form-control", @placeholder = "Damacana Türü" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Kordinat X</label>
+                <div class="col-sm-6">
+                    @Html.TextBoxFor(m => m.CarboyX, "", new { id = "CarboyX", @class = "form-control", @placeholder = "Kordinat X" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Kordinat Y</label>
+                <div class="col-sm-6">
+                    @Html.TextBoxFor(m => m.CarboyY, "", new { id = "CarboyY", @class = "form-control", @placeholder = "Kordinat Y" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="focusedinput" class="col-sm-3 control-label">Damacana Kullanıcısı</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="userName" id="userName">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Damacana Adres</label>
+                <div class="col-sm-6">
+                    @Html.TextBoxFor(m => m.CarboyAddress, "", new { id = "CarboyAddress", @class = "form-control", @placeholder = "Kordinat Adres" })
+                </div>
+            </div>
+
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <div class="btn-toolbar">
+                            <button class="btn-primary btn" type="submit">Kaydet</button>
+                            <a href="/Carboy/Index" class="btn-default btn">İptal</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var userId = '@Html.Raw(Json.Encode(ViewBag.UserId))'
+            var UserName2 = '@Html.Raw(Json.Encode(ViewBag.UserName))'
+
+            var platfromUrl = '/Carboy/GetUserInfo/';
+            var pageSize = 10000;
+            $('#userName').select2(
+            {
+                placeholder: 'Kullanıcı Adı, Ad Soyad, Email',
+                minimumInputLength: 3,
+                allowClear: true,
+                ajax: {
+                    quietMillis: 150,
+                    url: platfromUrl,
+                    dataType: 'jsonp',
+                    data: function (term, page) {
+                        return {
+                            pageSize: pageSize,
+                            pageNum: page,
+                            searchTerm: term
+                        };
+                    },
+                    results: function (data, page) {
+                        var more = (page * pageSize) < data.Total;
+                        return { results: data.Results, more: more };
+                    }
+                }
+            }).on('change', function (e) {
+
+            }).on('select', function (e) {
+                console.log("select");
+            });
+
+            if (userId != 'null' && UserName2 != 'null') {
+                $("#userName").select2("data", { id: userId, text: UserName2 });
+            }
+        });
+    </script>
+}

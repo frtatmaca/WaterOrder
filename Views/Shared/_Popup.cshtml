@@ -1,0 +1,141 @@
+﻿@{
+    Layout = null;
+    var lang = System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
+    var jsculture = System.Threading.Thread.CurrentThread.CurrentUICulture.ToString().Replace("-", "");
+    var dateFormat = Blms.Web.Core.WebUtilities.GetDateFormatForJQueryUI();
+    var decimalSeperator = Blms.Web.Core.WebUtilities.GetDecimalSeperator();
+}
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="@lang" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="@lang" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="@lang" style="height:100%">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/themes/base/css")
+    @Styles.Render("~/Content/basecss")
+    @Styles.Render("~/Content/metro/css")
+    @Styles.Render("~/Content/themes/uniformjs/default/css/uniform.default.min.css")
+    @Styles.Render("~/Content/utils")
+
+    <link href="@Styles.Url("~/Content/metrocss/themes/default.css")" rel="stylesheet" id="style_color" />
+    <!-- BEGIN PAGE LEVEL STYLES -->
+    @RenderSection("header", required: false)
+    <!-- END PAGE LEVEL STYLES -->
+
+
+    @Styles.Render("~/Content/popup.css")
+    <script type="text/javascript"> if (!window.console) console = {log: function() {}}; </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                @RenderSection("titleAndBreadcrumb", required: false)
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        @RenderBody()
+    </div>
+
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/dataservice")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/basescripts")
+    @Scripts.Render("~/bundles/app")
+    @Scripts.Render("~/bundles/utils")
+
+    <!-- ie8 fixes -->
+    <!--[if lt IE 9]>
+	@*Scripts.Render("~/bundles/ie")*@
+	<![endif]-->
+
+    @*  @Scripts.Render("~/bundles/modernizr")
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/knockout")*@
+    @Scripts.Render("~/bundles/utilities")@*
+	@Scripts.Render("~/bundles/prettify")
+
+
+	@Scripts.Render("~/bundles/metro")
+	@Scripts.Render("~/bundles/app")
+	@Scripts.Render("~/bundles/application")
+
+
+
+	@Scripts.Render("~/Scripts/select2_locale/select2_locale_" + System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName + ".js")*@
+
+    @Scripts.Render("~/scripts/application/blmsCommon.js")
+    @Scripts.Render("~/jsLocalization.ashx")
+
+
+    <script type="text/javascript">
+
+        $(function () {
+            App.setBaseUrl('@Href("~/Content/")')
+		    App.init();
+		    moment.lang('@lang');
+		    //blmsCommon.init('@lang', '@dateFormat', '@decimalSeperator');
+		    serviceInitializer.init();
+
+		    if(typeof PageFunction == 'function')
+		    {
+		        PageFunction();
+		    }
+
+		});
+
+		var l10n = {
+		    "getMessage": function (msg) {
+		        var culture = "@jsculture";
+		        if (!jsLocalization || !jsLocalization[culture]) return msg;
+		        var rVal = jsLocalization[culture][msg];
+				
+			    if (rVal == undefined) {
+			        var controller = '@HttpContext.Current.Request.RequestContext.RouteData.GetRequiredString("controller")';
+				    var action = '@HttpContext.Current.Request.RequestContext.RouteData.GetRequiredString("action")';
+				    var json = { text: msg, className: controller + '/' + action };
+				    globalizationService.save(json);
+
+				    return msg;
+				} 
+				else {
+				    return rVal;
+				}
+			}
+		};
+    </script>
+
+    @RenderSection("scripts", required: false)
+    @*confirm modal*@
+    <div id="blms_confirm_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="blms_confirm_modal_label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h3 id="blms_confirm_modal_label">@Html.LocalizeGlobal("r_shared_confirmheader")</h3>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <a class="btn red btnCancel" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i>&nbsp;@Html.LocalizeGlobal("r_gen_close")</a>
+            <a data-dismiss="modal" class="btn green btnOk"><i class="icon-ok"></i>&nbsp;@Html.LocalizeGlobal("r_shared_confirm")</a>
+        </div>
+    </div>
+    @*end of confirm modal*@
+</body>
+</html>

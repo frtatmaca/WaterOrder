@@ -1,0 +1,239 @@
+﻿@{
+    ViewBag.Title = "Email Listesi";
+    Layout = null;
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Damacana Kordinatları</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Avant">
+    <meta name="author" content="The Red Team">
+
+    <!-- <link href="~/Content/less/styles.less" rel="stylesheet/less" media="all">  -->
+    <link rel="stylesheet" href="~/Content/css/styles.css?=140">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
+
+
+    <link href='~/Content/demo/variations/default.css' rel='stylesheet' type='text/css' media='all' id='styleswitcher'>
+
+    <link href='~/Content/demo/variations/default.css' rel='stylesheet' type='text/css' media='all' id='headerswitcher'>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries. Placeholdr.js enables the placeholder attribute -->
+    <!--[if lt IE 9]>
+        <link rel="stylesheet" href="~/Content/css/ie8.css">
+        <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.1.0/respond.min.js"></script>
+        <script type="text/javascript" src="~/Content/plugins/charts-flot/excanvas.min.js"></script>
+    <![endif]-->
+    <!-- The following CSS are included as plugins and can be removed if unused-->
+
+    <link rel='stylesheet' type='text/css' href='~/Content/plugins/codeprettifier/prettify.css' />
+    <link rel='stylesheet' type='text/css' href='~/Content/plugins/form-toggle/toggles.css' />
+
+    <!-- <script type="text/javascript" src="~/Content/js/less.js"></script> -->
+</head>
+
+<body class="">
+
+
+    <div id="headerbar">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-xs-6 col-sm-2">
+                    <a href="#" class="shortcut-tiles tiles-primary">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-envelope-o"></i></div>
+                            <div class="pull-right"><span class="badge">10</span></div>
+                        </div>
+                        <div class="tiles-footer">
+                            Messages
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-xs-6 col-sm-2">
+                    <a href="#" class="shortcut-tiles tiles-midnightblue">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-cog"></i></div>
+                        </div>
+                        <div class="tiles-footer">
+                            Settings
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xs-6 col-sm-2">
+                    <a href="#" class="shortcut-tiles tiles-orange">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-wrench"></i></div>
+                        </div>
+                        <div class="tiles-footer">
+                            Plugins
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @Html.Partial("_LoginPartial")
+
+    <div id="page-container">
+        @Html.Partial("_SiderbarMenu")
+
+        <!-- END RIGHTBAR -->
+        <div id="page-content">
+            <div id='wrap'>
+
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h4>Geolocation</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div id="basic-map" style="height: 300px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="panel panel-danger">
+                                <div class="panel-heading">
+                                    <h4>Routes</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div id="advance-route" style="height: 300px">
+
+                                    </div>
+                                    <a href="#" id="start_travel" class="btn btn-primary" style="margin: 15px 0">Start</a>
+                                    <ul id="instructions"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h4>Street View Panoramas</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div id="panorama" style="height: 300px"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="panel panel-warning">
+                                <div class="panel-heading">
+                                    <h4>Fusion Tables layers</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div id="fusion" style="height: 250px"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="panel panel-warning">
+                                <div class="panel-heading">
+                                    <h4>Geocoding</h4>
+
+                                </div>
+                                <div class="panel-body">
+                                    <div id="geocoding" style="height: 204px;"></div>
+                                    <form method="post" id="geocoding_form" class="form-inline" style="margin-top:10px">
+                                        <div class="form-group">
+                                            <label for="address" class="sr-only control-label">Address:</label>
+                                            <div class="input-group">
+                                                <input type="text" id="address" name="address" class="form-control" placeholder="Address..." />
+                                                <span class="input-group-btn">
+                                                    <input type="submit" class="btn btn-primary" value="Search" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="panel panel-danger">
+                                <div class="panel-heading">
+                                    <h4>Poly Lines</h4>
+
+                                </div>
+                                <div class="panel-body">
+                                    <div id="polylines" style="height: 250px"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="panel panel-danger">
+                                <div class="panel-heading">
+                                    <h4>Polygons</h4>
+
+                                </div>
+                                <div class="panel-body">
+                                    <div id="polygons" style="height: 250px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- container -->
+
+            </div>
+            <!--wrap -->
+        </div> <!-- page-content -->
+
+        @Html.Partial("_Footer")
+
+    </div> <!-- page-container -->
+    <!--
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+    <script>!window.jQuery && document.write(unescape('%3Cscript src="~/Content/js/jquery-1.10.2.min.js"%3E%3C/script%3E'))</script>
+    <script type="text/javascript">!window.jQuery.ui && document.write(unescape('%3Cscript src="~/Content/js/jqueryui-1.10.3.min.js'))</script>
+    -->
+
+    <script type='text/javascript' src='~/Content/js/jquery-1.10.2.min.js'></script>
+    <script type='text/javascript' src='~/Content/js/jqueryui-1.10.3.min.js'></script>
+    <script type='text/javascript' src='~/Content/js/bootstrap.min.js'></script>
+    <script type='text/javascript' src='~/Content/js/enquire.js'></script>
+    <script type='text/javascript' src='~/Content/js/jquery.cookie.js'></script>
+    <script type='text/javascript' src='~/Content/js/jquery.nicescroll.min.js'></script>
+    <script type='text/javascript' src='~/Content/plugins/codeprettifier/prettify.js'></script>
+    
+    <script type='text/javascript' src='~/Content/plugins/sparklines/jquery.sparklines.min.js'></script>
+    <script type='text/javascript' src='~/Content/plugins/form-toggle/toggle.min.js'></script>
+    <script type='text/javascript' src='http://maps.google.com/maps/api/js?key=AIzaSyBICZhqpbU9JD1Wo4s2siSjEglf9fG0K6Q&sensor=true'></script>
+    <script type='text/javascript' src='~/Content/plugins/gmaps/gmaps.js'></script>
+    <script type='text/javascript' src='~/Content/demo/demo-gmaps.js'></script>
+    <script type='text/javascript' src='~/Content/js/placeholdr.js'></script>
+    <script type='text/javascript' src='~/Content/js/application.js'></script>
+    <script type='text/javascript' src='~/Content/demo/demo.js'></script>
+
+</body>
+</html>

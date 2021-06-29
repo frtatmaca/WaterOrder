@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "Create";
+}
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4>Email Gönder</h4>
+
+            </div>
+            <div class="panel-body" style="border-radius: 0px;">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="focusedinput" class="col-sm-3 control-label">To</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="userName" id="userName">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="focusedinput" class="col-sm-3 control-label">Subject</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject">
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+                            <label for="selector1" class="col-sm-3 control-label">Algoritma Tipi</label>
+                            <div class="col-sm-8">
+                                <select name="selector1" id="algoritmyType" class="form-control">
+                                    <option value="0">Seçiniz</option>
+                                    <option value="1">RK4</option>
+                                    <option value="2">RK5</option>
+                                </select>
+                            </div>
+                        </div>*@
+
+
+                    <div class="form-group">
+                        <label for="selector1" class="col-sm-3 control-label">Mesaj</label>
+                        <div class="col-sm-8">
+                            @*<div class="col-md-12 mesaj" id="mesaj" name="mesaj" style="min-height: 200px;border-style:groove !important" contenteditable="true">
+                                </div>*@
+                            @Html.TextArea("mesaj", htmlAttributes: new { @class = "ckeditor col-xs-12 col-md-8", tabindex = 1 })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="selector1" class="col-sm-3 control-label">Mesaj</label>
+                        <div class="col-sm-8" style="border:thick !important">
+                            <div class="form-horizontal">
+                                <span class="btn btn-success">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                    <span>Resim Seç</span>
+                                    <input id="fileupload" type="file" name="files">
+                                </span>
+                                <br />
+                                <span id="fileContainer"></span>
+                                <br />
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;">
+                                        <span class="sr-only">0% Tamamlandı</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <div class="btn-toolbar">
+                            <button id="btnSave" type="submit" class="btn-primary btn">Gönder</button>
+                            <a href="/Home/Index" class="btn-default btn">İptal</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script src="~/Scripts/jQuery.FileUpload/jquery.iframe-transport.js"></script>
+    <script src="~/Scripts/jQuery.FileUpload/jquery.fileupload.js"></script>
+    <script src="~/Scripts/jQuery.FileUpload/jquery.fileupload-ui.js"></script>
+
+    <script src="~/Scripts/application/email_create.js"></script>
+    <script>
+        $(document).ready(function () {
+            var platfromUrl = '/Home/GetUserInfo/';
+            var pageSize = 10000;
+            $('#userName').select2(
+            {
+                placeholder: 'Kullanıcı Adı, Ad Soyad, Email',
+                minimumInputLength: 3,
+                multiple: true,
+                allowClear: true,
+                ajax: {
+                    quietMillis: 150,
+                    url: platfromUrl,
+                    dataType: 'jsonp',
+                    data: function (term, page) {
+                        return {
+                            pageSize: pageSize,
+                            pageNum: page,
+                            searchTerm: term
+                        };
+                    },
+                    results: function (data, page) {
+                        var more = (page * pageSize) < data.Total;
+                        return { results: data.Results, more: more };
+                    }
+                }
+            }).on('change', function (e) {
+
+            }).on('select', function (e) {
+                console.log("select");
+            });
+
+
+        });
+    </script>
+}
+
